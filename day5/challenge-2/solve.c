@@ -72,9 +72,11 @@ listarray_t find_incorrectupdates(listarray_t rules, listarray_t* updates) {
 }
 
 void correct_update(listarray_t rules, list_t* incorrect_update) {
-	for(size_t i=0;i<incorrect_update->length-1;i++) {
-		if(!isrule_match(rules, incorrect_update->arr[i], incorrect_update->arr[i+1])) {
-			swap(&incorrect_update->arr[i], &incorrect_update->arr[i+1]);	
+	while(!update_iscorrect(rules, *incorrect_update)) {
+		for(size_t i=0;i<incorrect_update->length-1;i++) {
+			if(!isrule_match(rules, incorrect_update->arr[i], incorrect_update->arr[i+1])) {
+				swap(&incorrect_update->arr[i], &incorrect_update->arr[i+1]);	
+			}
 		}
 	}
 }
@@ -83,9 +85,7 @@ void print_totalmiddlepages(listarray_t rules, listarray_t* updates) {
 	listarray_t incorrect_updates = find_incorrectupdates(rules, updates);
 	int total_middlepages = 0;
 	for(size_t i=0;i<incorrect_updates.count;i++) {
-		for(size_t j=0;j<incorrect_updates.count;j++) {
-			correct_update(rules, &incorrect_updates.lists[i]);
-		}
+		correct_update(rules, &incorrect_updates.lists[i]);
 		total_middlepages += incorrect_updates.lists[i].arr[incorrect_updates.lists[i].length / 2];
 	}
 	printf("Corrected updates are:\n");
