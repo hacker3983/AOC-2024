@@ -8,6 +8,11 @@ typedef struct list {
 	size_t length;
 } list_t;
 
+void list_init(list_t* list) {
+	list->arr = NULL;
+	list->length = 0;
+}
+
 void list_append(list_t* list, int value) {
 	int* new_ptr = NULL;
 	if(!list->arr) {
@@ -53,7 +58,7 @@ void list_print(list_t list) {
 
 void list_destroy(list_t* list) {
 	free(list->arr);
-	list->length = 0;
+	list_init(list);
 }
 
 
